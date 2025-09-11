@@ -13,17 +13,20 @@ from peft import PeftModel, PeftConfig
 
 
 def get_pipe(
-            text_encoder_id=None, 
+            text_encoder_id=None,
             tokenizer_id=None,
-            unet_id=None, 
+            unet_id=None,
             vae_id=None,
             scheduler_id=None,
-            gpu_id=0, 
+            gpu_id=0,
             half=True,
             peft_model_id=None):
-    
+
     # text encoder
     text_encoder = LlamaModel.from_pretrained(text_encoder_id)
+    if half:
+        text_encoder = text_encoder.half()
+
     if peft_model_id  is not None:
         print("-----load lora----")
         text_encoder = PeftModel.from_pretrained(text_encoder, peft_model_id)
@@ -56,7 +59,7 @@ def get_pipe(
 
 def predict():
 
-    prompt = "A peaceful scene of a small town in winter, with snow-covered houses and trees around. The town is surrounded by mountains, and the sky is covered in clouds, creating a solemn atmosphere. In the foreground, there is a boat docked on the river, with the boat itself covered in snow. The water surface of the river is calm, reflecting the houses and trees in the distance. The roofs of the houses are covered in snow, and the windows are lit up, emitting a warm yellow light. The branches of the trees are also covered in snow, with the tips of the branches showing the blue-white color of the snow. The sky is blue, with some clouds drifting, and the sun is setting, casting a soft orange glow on the horizon. The entire scene is filled with the beauty of winter, evoking the feeling of tranquility and warmth."       
+    prompt = "A peaceful scene of a small town in winter, with snow-covered houses and trees around. The town is surrounded by mountains, and the sky is covered in clouds, creating a solemn atmosphere. In the foreground, there is a boat docked on the river, with the boat itself covered in snow. The water surface of the river is calm, reflecting the houses and trees in the distance. The roofs of the houses are covered in snow, and the windows are lit up, emitting a warm yellow light. The branches of the trees are also covered in snow, with the tips of the branches showing the blue-white color of the snow. The sky is blue, with some clouds drifting, and the sun is setting, casting a soft orange glow on the horizon. The entire scene is filled with the beauty of winter, evoking the feeling of tranquility and warmth."
     # 384 模型
 #     unet_id = "./weights/unet_384"
     # 512 模型
@@ -64,12 +67,14 @@ def predict():
 
     # 1024 模型
     unet_id = "./weights/unet"
-    
 
 
-    
+
+
     width = 1024
     height = 640
+    # width = 768
+    # height = 512
     pipeconfig = {
         "text_encoder_id": "./weights/Llama-2-7b-hf",
         "tokenizer_id": "./weights/Llama-2-7b-hf",
@@ -78,19 +83,19 @@ def predict():
         "unet_id": unet_id,
 #         "peft_model_id": None,
         "peft_model_id": "./weights/text_encoder_lora",
-        "half": True}    
-    
+        "half": True}
+
     pipe = get_pipe(**pipeconfig)
     generator = torch.Generator(pipe.device).manual_seed(45)
-    out = pipe(prompt=prompt, 
-                width=width, 
-                height=height, 
-                generator=generator, 
-                num_inference_steps=100, 
-                num_images_per_prompt=1, 
+    out = pipe(prompt=prompt,
+                width=width,
+                height=height,
+                generator=generator,
+                num_inference_steps=100,
+                num_images_per_prompt=1,
                 guidance_scale=7.5).images
 
-        
+
     out[0].save("./demo.jpg")
 
 if __name__ == '__main__':
