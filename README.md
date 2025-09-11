@@ -1,5 +1,5 @@
 # ParaDiffusion
-### <div align="center"> Paragraph-to-Image Generation with Information-Enriched Diffusion Model <div> 
+### <div align="center"> Paragraph-to-Image Generation with Information-Enriched Diffusion Model <div>
 
 <div align="center">
   <a href="https://weijiawu.github.io/ParaDiffusionPage/"><img src="https://img.shields.io/static/v1?label=Project%20Page&message=Github&color=blue&logo=github-pages"></a> &ensp;
@@ -38,7 +38,7 @@ diffusers
 git clone https://github.com/weijiawu/ParaDiffusion
 cd ParaDiffusion
 
-conda create -n ParaDiffusion python=3.8
+conda create -n ParaDiffusion python=3.10
 conda activate ParaDiffusion
 pip install -r requirements.txt
 ```
@@ -49,10 +49,10 @@ pip install -r requirements.txt
 
 Download our pretrained model for the ParaDiffusion:
 ```bash 
-mkdir -p weight
-cd weight
+mkdir -p weights
+cd weights
 
-# download the weight of ParaDiffusion to ./weight
+# download the weight of ParaDiffusion to ./weights
 git lfs install
 git clone https://huggingface.co/weijiawu/ParaDiffusion
 ```
@@ -65,7 +65,7 @@ python demo.py
 
 
 ## ✏️ Paragraph-Image Dataset: ParaImage-Small
- 
+
 ---
 ![image.](asset/images/WX20231124-120329@2x.png)
 
@@ -101,13 +101,13 @@ The previous prompts testing was mostly concentrated on text alignments within t
 
 ## 📖BibTeX
     @misc{wu2023paradiffusion,
-          title={Paragraph-to-Image Generation with Information-Enriched Diffusion Model}, 
+          title={Paragraph-to-Image Generation with Information-Enriched Diffusion Model},
           author={Weijia Wu, Zhuang Li, Yefei He, Mike Zheng Shou, Chunhua Shen, Lele Cheng, Yan Li, Tingting Gao, Di Zhang, Zhongyuan Wang},
           year={2023},
           eprint={2311.14284},
           archivePrefix={arXiv},
           primaryClass={cs.CV}
     }
-    
+
 ## 🤗Acknowledgements
 - Thanks to [Diffusers](https://github.com/huggingface/diffusers) for the wonderful work and codebase.
