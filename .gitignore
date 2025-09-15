@@ -3,3 +3,7 @@ __pycache__/
 
 # Output files
 demo.jpg
+
+dataset/
+
+laion_aesthetic_sample/
