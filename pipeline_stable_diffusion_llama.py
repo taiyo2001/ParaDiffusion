@@ -71,6 +71,9 @@ def rescale_noise_cfg(noise_cfg, noise_pred_text, guidance_rescale=0.0):
     return noise_cfg
 
 
+#############################################
+###           カスタムパイプライン           ###
+#############################################
 class StableDiffusionLlamaPipeline(DiffusionPipeline, TextualInversionLoaderMixin, LoraLoaderMixin, FromSingleFileMixin):
     r"""
     Pipeline for text-to-image generation using Stable Diffusion.
@@ -441,7 +444,7 @@ class StableDiffusionLlamaPipeline(DiffusionPipeline, TextualInversionLoaderMixi
                 attention_mask=attention_mask,
             output_hidden_states=True
             ).last_hidden_state
-            
+
             # negative_prompt_embeds = negative_prompt_embeds[0]
             # negative_prompt_embeds = negative_prompt_embeds.mems[-2]
 
@@ -569,6 +572,7 @@ class StableDiffusionLlamaPipeline(DiffusionPipeline, TextualInversionLoaderMixi
         latents = latents * self.scheduler.init_noise_sigma
         return latents
 
+    ### 画像生成実行 ###
     @torch.no_grad()
     @replace_example_docstring(EXAMPLE_DOC_STRING)
     def __call__(
@@ -731,7 +735,7 @@ class StableDiffusionLlamaPipeline(DiffusionPipeline, TextualInversionLoaderMixi
                 # expand the latents if we are doing classifier free guidance
                 latent_model_input = torch.cat([latents] * 2) if do_classifier_free_guidance else latents
                 latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
-    
+
                 # predict the noise residual
                 noise_pred = self.unet(
                     latent_model_input,
