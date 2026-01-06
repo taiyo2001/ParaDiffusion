@@ -20,7 +20,8 @@ def get_pipe(
             scheduler_id=None,
             gpu_id=0,
             half=True,
-            peft_model_id=None):
+            peft_model_id=None,
+            long_prompt=False):
 
     # text encoder
     text_encoder = LlamaModel.from_pretrained(text_encoder_id)
@@ -35,6 +36,8 @@ def get_pipe(
     tokenizer = AutoTokenizer.from_pretrained(tokenizer_id)
     tokenizer.pad_token = tokenizer.eos_token
     tokenizer.model_max_length = 256
+    if long_prompt:
+        tokenizer.model_max_length = 768
     # scheduler
     scheduler = DPMSolverMultistepScheduler.from_pretrained(scheduler_id)
     # vae
